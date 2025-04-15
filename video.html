@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 提前执行主题设置，防止闪烁 -->
+    <script>
+      (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const isDayTime = (hour > 6 || (hour === 6 && minute >= 30)) && hour < 18;
+        const theme = isDayTime ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        // console.log('Inline script set theme:', theme); // 调试用
+      })();
+    </script>
+    <title>Video - Yuze Pan | Klassischer Gitarrist</title>
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href="static/css/protection.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <script src="static/js/theme-switcher.js" defer></script>
+    <style>
+        /* 移除播放器栏样式覆盖,让 CSS 变量生效 */
+        /* .player-bar {
+            background: #121212 !important; 
+            backdrop-filter: none !important; 
+            -webkit-backdrop-filter: none !important; 
+        } */
+        
+        /* YouTube视频容器样式 */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            padding-top: 56.25%; /* 16:9 宽高比 */
+            background: #000;
+            border-radius: 4px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        /* 链接阻止层样式 */
+        .link-blocker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .link-blocker-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .link-blocker-message {
+            background: #fff;
+            color: #000;
+            padding: 20px 30px;
+            border-radius: 4px;
+            max-width: 90%;
+            text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: messageAppear 0.3s forwards;
+        }
+        
+        @keyframes messageAppear {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* 防止右键菜单 */
+        .video-wrapper {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        /* 防止视频互动区域移动 */
+        .video-interaction-blocker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            /* 允许点击通过到视频区域,但阻止拖拽等操作 */
+            pointer-events: none;
+        }
+        
+        /* 视频结束保护层样式 */
+        .video-end-protection-overlay {
+            background: transparent;
+            pointer-events: auto;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="video-page page-transition">
+    <!-- 视频页面 -->
+    <section class="video-section">
+        <div class="video-container">
+            <h1 class="video-title">Auftritt</h1>
+            <p class="video-description">Auftritt bei der Future Stars Konzertreihe, Huabin Opernhaus, Peking</p>
+            
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/7NrO3vBjsos?rel=0&showinfo=0&modestbranding=1&controls=1&disablekb=1&fs=1&iv_load_policy=3&hl=de&cc_load_policy=0&color=white&si=ySLLulDdZ9ryJWZO" title="Yuze Pan - Klassische Gitarre Darbietung" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <div class="video-interaction-blocker"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 链接阻止提示框 -->
+    <div class="link-blocker-overlay" id="linkBlockerOverlay">
+        <div class="link-blocker-message">
+            Externe Links sind nicht erlaubt.
+        </div>
+    </div>
+    
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-logo">Yuze Pan</div>
+        <nav class="nav-menu">
+            <a href="index.html#hero" class="nav-item">STARTSEITE</a>
+            <a href="index.html#profile" class="nav-item">PROFIL</a>
+            <a href="gallery.html" class="nav-item">GALERIE</a>
+            <a href="video.html" class="nav-item active">VIDEO</a>
+            <a href="contact.html" class="nav-item">KONTAKT</a>
+        </nav>
+    </div>
+    
+    <!-- 播放器栏 - 会通过CSS自动隐藏并平滑过渡 -->
+    <div class="player-bar">
+        <div class="player-controls">
+            <button class="player-btn prev-btn" aria-label="Vorheriger Titel"></button>
+            <button class="player-btn play-btn" aria-label="Wiedergabe/Pause"></button>
+            <button class="player-btn next-btn" aria-label="Nächster Titel"></button>
+        </div>
+        <div class="player-info">
+            <span class="track-name"></span>
+            <span class="track-time">0:00/0:00</span>
+        </div>
+    </div>
+    
+    <!-- 脚本 -->
+    <script src="static/js/player.js"></script>
+    <script src="static/js/protection.js"></script>
+    <script src="static/js/video-protection.js"></script>
+    
+    <!-- 页面过渡动画脚本 -->
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载视频保护系统
+            initVideoProtection();
+            
+            // 其他初始化代码...
+        });
+        
+        // 移除重复的beforeunload事件监听
+        // window.addEventListener('beforeunload', function(e) {
+        //     e.preventDefault();
+        //     e.returnValue = '';
+        //     return '';
+        // });
+    </script>
+</body>
+</html> 
